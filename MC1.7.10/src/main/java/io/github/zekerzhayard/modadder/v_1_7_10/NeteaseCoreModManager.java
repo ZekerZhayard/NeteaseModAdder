@@ -3,20 +3,25 @@ package io.github.zekerzhayard.modadder.v_1_7_10;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 import org.apache.logging.log4j.Level;
-
+import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ObjectArrays;
+import com.google.common.io.ByteSource;
 import com.google.common.primitives.Ints;
 
 import cpw.mods.fml.common.asm.transformers.ModAccessTransformer;
@@ -64,6 +69,29 @@ public class NeteaseCoreModManager {
             return null;
         }
     }
+    
+    private static void addJar(final JarFile jar) throws IOException {
+        Manifest manifest = jar.getManifest();
+        String atList = manifest.getMainAttributes().getValue("FMLAT");
+        if (atList == null) {
+            return;
+        }
+        for (String at : atList.split(" ")) {
+            final JarEntry jarEntry = jar.getJarEntry("META-INF/" + at);
+            if (jarEntry != null) {
+                try {
+                    ((Map<String, String>) NeteaseCoreModManager.reflectField(Class.forName(ModAccessTransformer.class.getName(), false, NeteaseCoreModManager.class.getClassLoader().getClass().getClassLoader()), "embedded")).put(String.format("%s!META-INF/%s", jar.getName(), at), new ByteSource() {
+                        @Override()
+                        public InputStream openStream() throws IOException {
+                            return jar.getInputStream(jarEntry);
+                        }
+                    }.asCharSource(Charsets.UTF_8).read());
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     public static void discoverCoreMods(File mcDir, LaunchClassLoader classLoader) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         File coreMods = (File) NeteaseCoreModManager.methodSetupCoreModDir.invoke(null, mcDir); // File coreMods = setupCoreModDir(mcDir);
@@ -94,7 +122,7 @@ public class NeteaseCoreModManager {
                     // // Not a coremod and no access transformer list
                     continue;
                 }
-                ModAccessTransformer.addJar(jar);
+                NeteaseCoreModManager.addJar(jar);
                 mfAttributes = jar.getManifest().getMainAttributes();
             } catch (IOException ioe) {
                 FMLRelaunchLog.log(Level.ERROR, ioe, "Unable to read the jar file %s - ignoring", coreMod.getName());

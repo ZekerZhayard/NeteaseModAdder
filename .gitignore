@@ -1,0 +1,8 @@
+*gradle*
+*/bin
+*/build
+*.launch
+*/run
+*.project
+*.settings
+*.classpath
