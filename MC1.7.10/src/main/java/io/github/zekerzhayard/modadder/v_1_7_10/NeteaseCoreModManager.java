@@ -16,14 +16,12 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import org.apache.logging.log4j.Level;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.io.ByteSource;
 import com.google.common.primitives.Ints;
-
 import cpw.mods.fml.common.asm.transformers.ModAccessTransformer;
 import cpw.mods.fml.relauncher.CoreModManager;
 import cpw.mods.fml.relauncher.FMLInjectionData;
@@ -33,14 +31,16 @@ import cpw.mods.fml.relauncher.FileListHelper;
 import cpw.mods.fml.relauncher.ModListHelper;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import org.apache.logging.log4j.Level;
 
+@SuppressWarnings("unchecked")
 public class NeteaseCoreModManager {
     private static final Attributes.Name COREMODCONTAINSFMLMOD = (Attributes.Name) NeteaseCoreModManager.reflectField(CoreModManager.class, "COREMODCONTAINSFMLMOD");
     private static final Attributes.Name MODTYPE = (Attributes.Name) NeteaseCoreModManager.reflectField(CoreModManager.class, "MODTYPE");
     private static final Attributes.Name MODSIDE = (Attributes.Name) NeteaseCoreModManager.reflectField(CoreModManager.class, "MODSIDE");
 
-    private static List<String> loadedCoremods = (List<String>) NeteaseCoreModManager.reflectField(CoreModManager.class, "loadedCoremods");
-    private static List<String> reparsedCoremods = (List<String>) NeteaseCoreModManager.reflectField(CoreModManager.class, "reparsedCoremods");
+    public static List<String> loadedCoremods = (List<String>) NeteaseCoreModManager.reflectField(CoreModManager.class, "loadedCoremods");
+    public static List<String> reparsedCoremods = (List<String>) NeteaseCoreModManager.reflectField(CoreModManager.class, "reparsedCoremods");
     private static Side side = (Side) NeteaseCoreModManager.reflectField(FMLLaunchHandler.class, "side");
     private static String mccversion = (String) NeteaseCoreModManager.reflectField(FMLInjectionData.class, "mccversion");
 

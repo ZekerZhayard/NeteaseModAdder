@@ -16,14 +16,12 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import org.apache.logging.log4j.Level;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.io.ByteSource;
 import com.google.common.primitives.Ints;
-
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.fml.common.asm.transformers.ModAccessTransformer;
 import net.minecraftforge.fml.relauncher.CoreModManager;
@@ -33,14 +31,16 @@ import net.minecraftforge.fml.relauncher.FMLRelaunchLog;
 import net.minecraftforge.fml.relauncher.FileListHelper;
 import net.minecraftforge.fml.relauncher.ModListHelper;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.logging.log4j.Level;
 
+@SuppressWarnings({ "deprecation", "unchecked" })
 public class NeteaseCoreModManager {
     private static final Attributes.Name COREMODCONTAINSFMLMOD = (Attributes.Name) NeteaseCoreModManager.reflectField(CoreModManager.class, "COREMODCONTAINSFMLMOD");
     private static final Attributes.Name MODTYPE = (Attributes.Name) NeteaseCoreModManager.reflectField(CoreModManager.class, "MODTYPE");
     private static final Attributes.Name MODSIDE = (Attributes.Name) NeteaseCoreModManager.reflectField(CoreModManager.class, "MODSIDE");
 
-    private static List<String> candidateModFiles;
-    private static List<String> ignoredModFiles;
+    public static List<String> candidateModFiles;
+    public static List<String> ignoredModFiles;
     private static Side side = (Side) NeteaseCoreModManager.reflectField(FMLLaunchHandler.class, "side");
     private static String mccversion;
 
