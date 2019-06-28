@@ -42,7 +42,7 @@ public class ModAdder implements IFMLLoadingPlugin {
         try {
             if (new JsonParser().parse(new FileReader(settings)).getAsJsonObject().get("loadNeteaseMods").getAsBoolean()) {
                 return null;
-            };
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -59,42 +59,39 @@ public class ModAdder implements IFMLLoadingPlugin {
         // Remove all netease core mods
         for (ITweaker tweaker : (List<ITweaker>) Launch.blackboard.get("Tweaks")) {
             if (tweaker.getClass().getName().equals("net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper")) {
-                for (Field field : tweaker.getClass().getDeclaredFields()) {
-                    if (field.getName().equals("coreModInstance")) {
-                        field.setAccessible(true);
-                        try {
-                            if (field.get(tweaker).getClass().getName().startsWith("com.netease.mc.")) {
-                                field.set(tweaker, new IFMLLoadingPlugin() {
-                                    @Override
-                                    public void injectData(Map<String, Object> data) {
-                                        
-                                    }
-                                    
-                                    @Override
-                                    public String getSetupClass() {
-                                        return null;
-                                    }
-                                    
-                                    @Override
-                                    public String getModContainerClass() {
-                                        return null;
-                                    }
-                                    
-                                    @Override
-                                    public String getAccessTransformerClass() {
-                                        return null;
-                                    }
-                                    
-                                    @Override
-                                    public String[] getASMTransformerClass() {
-                                        return null;
-                                    }
-                                });
+                try {
+                    Field field = tweaker.getClass().getField("coreModInstance");
+                    field.setAccessible(true);
+                    if (field.get(tweaker).getClass().getProtectionDomain().getCodeSource().getLocation().getFile().endsWith("@3@0.jar")) {
+                        field.set(tweaker, new IFMLLoadingPlugin() {
+                            @Override
+                            public void injectData(Map<String, Object> data) {
+                                
                             }
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
+                            
+                            @Override
+                            public String getSetupClass() {
+                                return null;
+                            }
+                            
+                            @Override
+                            public String getModContainerClass() {
+                                return null;
+                            }
+                            
+                            @Override
+                            public String getAccessTransformerClass() {
+                                return null;
+                            }
+                            
+                            @Override
+                            public String[] getASMTransformerClass() {
+                                return null;
+                            }
+                        });
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
