@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "3.0"
+group= "io.github.zekerzhayard"
+archivesBaseName = "NeteaseModAdder"
+
+jar {
+    manifest.attributes(
+            'FMLCorePlugin': 'io.github.zekerzhayard.modadder.ModAdder',
+            'Name': 'NeteaseModAdder',
+            'Specification-Title': 'NeteaseModAdder',
+            'Specification-Version': project.version,
+            'Specification-Vendor': 'ZekerZhayard',
+            'Implementation-Title': 'NeteaseModAdder',
+            'Implementation-Version': project.version,
+            'Implementation-Vendor': 'ZekerZhayard'
+    )
+    include "cpw/mods/fml/relauncher/IFMLLoadingPlugin.class"
+    include "net/minecraftforge/fml/relauncher/IFMLLoadingPlugin.class"
+    include "io/**"
+    include "META-INF/mods.toml"
+}
+
+sourceCompatibility = targetCompatibility = "1.7"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.7"
+}
+
+minecraft {
+    version = "1.8-11.14.4.1563"
+    runDir = "run"
+    mappings = "stable_18"
+}
