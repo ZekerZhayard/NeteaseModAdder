@@ -1,11 +1,11 @@
-package io.github.zekerzhayard.modadder;
+package io.github.zekerzhayard.modadder.launchwrapper;
 
 import java.io.File;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-import io.github.zekerzhayard.modadder.v_1_7_10.NeteaseCoreModManager;
+import io.github.zekerzhayard.modadder.launchwrapper.v_1_7_10.NeteaseCoreModManager;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -16,7 +16,7 @@ public class ModAdder implements IFMLLoadingPlugin, net.minecraftforge.fml.relau
         if (mcVersion.equals("1.7.10")) {
             NeteaseCoreModManager.discoverCoreMods(new File("."), Launch.classLoader);
         } else if (Lists.newArrayList("1.8", "1.8.8", "1.8.9", "1.9.4", "1.10.2", "1.11.2").contains(mcVersion)) {
-            io.github.zekerzhayard.modadder.v_1_8_plus.NeteaseCoreModManager.discoverCoreMods(new File("."), Launch.classLoader);
+            io.github.zekerzhayard.modadder.launchwrapper.v_1_8_plus.NeteaseCoreModManager.discoverCoreMods(new File("."), Launch.classLoader);
         }
     }
 

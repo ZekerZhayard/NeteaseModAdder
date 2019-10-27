@@ -18,7 +18,7 @@ archivesBaseName = "NeteaseModAdder"
 
 jar {
     manifest.attributes(
-            'FMLCorePlugin': 'io.github.zekerzhayard.modadder.ModAdder',
+            'FMLCorePlugin': 'io.github.zekerzhayard.modadder.launchwrapper.ModAdder',
             'Name': 'NeteaseModAdder',
             'Specification-Title': 'NeteaseModAdder',
             'Specification-Version': project.version,
@@ -30,7 +30,13 @@ jar {
     include "cpw/mods/fml/relauncher/IFMLLoadingPlugin.class"
     include "net/minecraftforge/fml/relauncher/IFMLLoadingPlugin.class"
     include "io/**"
-    include "META-INF/mods.toml"
+    include "META-INF/**"
+}
+
+dependencies {
+    compile("cpw.mods:modlauncher:2.1.5") {
+        transitive = false
+    }
 }
 
 sourceCompatibility = targetCompatibility = "1.7"
