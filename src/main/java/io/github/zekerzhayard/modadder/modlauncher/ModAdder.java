@@ -35,7 +35,7 @@ public class ModAdder implements ITransformationService {
         Object transformationServicesHandler = FieldUtils.readDeclaredField(Launcher.INSTANCE, "transformationServicesHandler", true);
         Logger logger = (Logger) FieldUtils.readDeclaredStaticField(transformationServicesHandler.getClass(), "LOGGER", true);
         Marker modAdder = MarkerManager.getMarker("NETEASEMODADDER");
-        List<Path> additionalPaths = this.candidatesModDirTransformer(new File("").getAbsoluteFile().toPath());
+        List<Path> additionalPaths = candidatesModDirTransformer(new File("").getAbsoluteFile().toPath());
         logger.debug(modAdder, "Found additional transformation services from discovery services: {}", additionalPaths);
         ClassLoader cl = this.getClass().getClassLoader();
         for (Path p : additionalPaths) {
@@ -70,7 +70,7 @@ public class ModAdder implements ITransformationService {
         return new ArrayList<>();
     }
 
-    private List<Path> candidatesModDirTransformer(final Path gameDirectory) {
+    static List<Path> candidatesModDirTransformer(final Path gameDirectory) {
         final Path modsDir = gameDirectory.resolve(FMLPaths.MODSDIR.relative());
         List<Path> paths = new ArrayList<>();
         List<File> files = Lists.newArrayList(FileUtils.listFiles(modsDir.toFile(), new String[] {"zip"}, false));

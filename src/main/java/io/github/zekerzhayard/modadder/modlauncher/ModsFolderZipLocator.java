@@ -16,9 +16,14 @@ public class ModsFolderZipLocator extends ModsFolderLocator {
     @Override
     public List<ModFile> scanMods() {
         List<File> modsFile = Lists.newArrayList(FileUtils.listFiles(this.modFolder.toFile(), new String[] { "zip" }, false));
+        List<Path> excluded = ModAdder.candidatesModDirTransformer(FMLPaths.GAMEDIR.get());
         List<ModFile> modFiles = Lists.newArrayList();
         for (File modFile : modsFile) {
-            ModFile file = new ModFile(modFile.toPath(), this);
+            Path p = modFile.toPath();
+            if (excluded.contains(p)) {
+                continue;
+            }
+            ModFile file = new ModFile(p, this);
             modFiles.add(file);
             this.modJars.put(file, this.createFileSystem(file));
         }
