@@ -98,7 +98,7 @@ public class NeteaseCoreModManager {
             if (jarEntry != null) {
                 try {
                     ((Map<String, String>) NeteaseCoreModManager.reflectField(Class.forName(ModAccessTransformer.class.getName(), false, NeteaseCoreModManager.class.getClassLoader().getClass().getClassLoader()), "embedded")).put(String.format("%s!META-INF/%s", jar.getName(), at), new ByteSource() {
-                        @Override()
+                        @Override
                         public InputStream openStream() throws IOException {
                             return jar.getInputStream(jarEntry);
                         }

@@ -1,20 +1,30 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+
+apply plugin: "base"
+apply plugin: "idea"
+apply plugin: "java"
+
+version = "3.1"
+group = "io.github.zekerzhayard"
+archivesBaseName = "NeteaseModAdder"
+
+repositories {
+    jcenter()
+    maven {
+        url = "https://files.minecraftforge.net/maven"
     }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+    maven {
+        url = "https://libraries.minecraft.net"
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "3.0"
-group= "io.github.zekerzhayard"
-archivesBaseName = "NeteaseModAdder"
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.google.guava:guava:15.0"
+    compile "commons-io:commons-io:2.4"
+    compile "cpw.mods:modlauncher:2.1.5"
+    compile "net.minecraft:launchwrapper:1.12"
+    compile "org.apache.commons:commons-lang3:3.1"
+}
 
 jar {
     manifest.attributes(
@@ -27,25 +37,24 @@ jar {
             'Implementation-Version': project.version,
             'Implementation-Vendor': 'ZekerZhayard'
     )
+
+    from {
+        configurations.compile.filter {
+            it.toString().contains("universal")
+        }.collect {
+            zipTree(it)
+        }
+
+    }
     include "cpw/mods/fml/relauncher/IFMLLoadingPlugin.class"
     include "net/minecraftforge/fml/relauncher/IFMLLoadingPlugin.class"
-    include "io/**"
-    include "META-INF/**"
-}
-
-dependencies {
-    compile("cpw.mods:modlauncher:2.1.5") {
-        transitive = false
-    }
+    include "io/github/zekerzhayard/**"
+    include "META-INF/mods.toml"
+    include "META-INF/services/cpw.mods.modlauncher.api.ITransformationService"
+    include "META-INF/services/net.minecraftforge.fml.loading.moddiscovery.IModLocator"
 }
 
 sourceCompatibility = targetCompatibility = "1.7"
 compileJava {
     sourceCompatibility = targetCompatibility = "1.7"
-}
-
-minecraft {
-    version = "1.8-11.14.4.1563"
-    runDir = "run"
-    mappings = "stable_18"
 }
